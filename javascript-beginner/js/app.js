@@ -1,34 +1,64 @@
-// variables
-// var, let, const
-// var name = 'John Doe';
-// console.log(name);
-// name = 'Steve Smith';
-// console.log(name);  
+// Strings and Methods 
+const firstName = 'William';
+const lastName = 'Johnson';
+str = 'Hello there my name is Gargi';
+tags = 'Web Development, Programming, Java, Python Developer'
+let val;
 
-// //Init Variable
-// var greeting;
-// console.log(greeting)
-// console.log('greeting')  // what is the differenece in this line and above
+val = firstName + lastName;
 
-// // letters , numbers , _, $
-// // cannot start with number
+//concatenation
+val = firstName + ' ' + lastName;
 
-// // multi word vars
-// var firstName = 'John'; //Camel case
-// var FirstName = 'Lee'; // Pascal case
-// var first_name = 'Tom'; //Underscore
-// var firstname = 'Rob'; // no convention followed.
+// Append
+val = 'Brad ';
+val += 'Traversy';
 
-// LET  - let has advantages over var in block level scopes
-// let name = 'John';
-// console.log(name);
-// name = 'sarah'; // reassigned to another name
-// console.log(name);
+age = 36;
+val = 'Hello my name is ' + firstName + ' and I am ' + age;
 
-//CONST
-const name = 'John';
-console.log(name);
-// cannot reassign
-//name = 'Sarah'; // exception reported on console.
-// have to assign value
-//const greeting; // you see error on console
+//Escaping
+// val = 'That's awesome, I can't wait';  // error ... 
+val = "That's awesome, I can't wait"; // solution 1 - use double quote
+val = 'That\'s awesome, I can\'t wait'; // solution 2 - use escape char
+
+// Length - its a property of string not method
+val = firstName.length  // notice no parenthesis after length.
+
+// Change case
+val = firstName.toUpperCase();
+val = firstName.toLowerCase();
+
+val = firstName[1]; // treating string as array
+
+//indexOf()
+val = firstName.indexOf('l');
+val = firstName.lastIndexOf('l');
+
+//charAt()
+val = firstName.charAt('2');
+// Get last char
+val = firstName.charAt(firstName.length - 1);
+
+
+// substring
+val  = firstName.substring(0, 4);
+
+// slice()
+val = firstName.slice(0, 4);
+val = firstName.slice(-3); // slice accepts -ve numbers starts from end.
+
+// split()
+val = str.split(' ');
+val = tags.split(',');
+
+// replace()
+val = str.replace('Gargi', 'Chinmayi');
+
+
+// includes()
+val = str.includes('Hello'); // gives true
+
+val = str.includes('hello');  // gives false
+
+console.log(val);
