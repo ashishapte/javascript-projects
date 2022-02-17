@@ -1,0 +1,192 @@
+
+## NPM Package manager
+# New project
+npm init 
+## answer questions and it will create package.json for you in the same folder.
+
+#. npmrc is config file for custom registry location
+# you may also provide registry location as npm command line argument
+
+npm init --registry=<url>
+
+## Semantic Versioning
+major-version.minor-version.patch
+5.21.17
+
+example: Bug Fixes - go into patch version
+         New Features with previous version compatibility - then you change minor version
+         Introduction of non-compatible features or changing project completely - in that case major version is updated.
+
+Exact version : 5.21.17
+Greater Than : >5.21.1
+Compatible changes : ^5.21.8 # minor version and patch version may change
+                             # But changes to major verion not acceptable.
+Minor-level changes : ~5.21.8 ## only patch versions may change.
+
+# npm install
+- looks for package.json in same folder
+- if not present then no packages are installed
+- if package.json has dependencies then those are installed 
+- installed in node_modules folder under local directory
+- if node_modules folder is not there then it will get created.
+
+
+# npm install <package>
+- package is installed under node_modules folder in your project
+- package is added as dependency in package.json.
+
+# npm install --save-dev 
+ or
+# npm install -D 
+- in this case package is installed in node_modules folder
+- and package is added as development dependency in package.json
+
+# dependencies
+- installed using 'npm install' or 'npm install <package>' command
+- if package A has dependency on Package B then package B will be installed along with its own dependencies.
+- This is called transitive installation.
+
+# development dependencies
+- installed using 'npm install'
+- Not installed using 'npm install --production' 
+- if package A is installed using 'npm install <packageA>' and it has devDependencies on package B then package B will NOT be installed.
+
+# to install package as development dependency
+npm install --save-dev 
+OR 
+npm install -D 
+# npm install -D browserslist  
+- installed browserslist as development dependency
+
+# browser application and server packages
+- node command can run index.js instructions
+- but when you add index.js to index.html and make it browser application, then browser complains about require syntax in index.js file
+- This is because broswer doesn't understand this JS syntax, but node undestands it.
+
+# Task
+- create browser application that uses functionalit of moment js package.
+- package name is 'clock'
+- initialize it and install 'moment' dependency
+- create index.html, src/style.css, src/index.js
+- place formatted time in the <h1>
+- update clock each second.
+
+# In this Task
+- I creaed index.html , src/style.css and src/index.js
+- moment package was installed in node_modules
+- however, index.js did not use require syntax to load module.
+- Instead, one of the time related function was copied from moment package.
+  and inserted into index.js
+- I created two more arrow functions to get final result.
+- So things to note
+  - Browser is not aware of node_modules folder.
+  - It just reads index.html and code in index.js
+  - It is not aware of dependencies and dev dependencies.
+  - It has zero relation to the browser app.
+
+
+  # how to add packages ?
+  - dependencies or devDependencies ?
+  - You can add all packages as devDependencies 
+  OR 
+  - Add all of them as dependencies
+  - It doesn't matter for browser application
+  - Suggestion
+    - add all dependencies as devDependencies 
+    - then create a build and serve this build to browser.
+    - This build is called bundle.
+    - Do not install some packages as dependencies and some as devDependencies
+    - It does not matter for standalone browser application
+    - So when does it matter ?
+      - It matters for public packages
+      - And when other packages are dependent on your package.
+      - E.g. browserslist package uses caniuselite package in its own code
+        So browserslist has dependency on caniuselite pacakge.
+      - If you use browserslist in your application, then you will need to add browserslist as dependency in your application. As you will need it during compilation of build.
+    
+## Exploring package information and versions
+- npm view <package name>
+e.g. npm view moment
+- to see all versions
+     npm view <package name> versions
+e.g. npm view babel-cli versions
+
+## Installing specific versions
+npm install <package-name> 
+- above command installed latest stable release of the package
+npm install <package-name@version> 
+- this is to install specific version.
+e.g.
+  - View all versions of moment package
+  npm view moment versions
+  - notice latest stable version was installed previously.
+  - now lets install 2.14.0
+  - package installs with some vulnerabilities
+  - run 'npm audit' to see vulnerabilities
+  - notice that package.json automatically updated with old version 
+  - Now install back latest version
+    npm install moment
+
+# package-lock.json
+  - This file has package dependency tree along with versions used in your project.
+  - It lists all dependencies and also dependencies of development packages
+  - Why this is needed?
+    - This helps in maintaining same versions while installing project packages on different computers and at different time.
+    - As minor versions and patch versions change over time, npm install command run after few months may install higher version of packages than originally installed in project. This may break your code.
+
+
+## how to handle lock file
+- always commit lock file to source control
+- node_modules should not be commited.
+- lock file is not published to NPM software registry
+
+## lockfile-demo project
+- create new folder
+- npm init -y
+- npm install mocha -D # install mocha latest version as development dependency
+- note this package has 79 other dependencies.
+- All of these get installed as part of npm install mocha
+- package.json lists "mocha": "^9.2.0" as development dependency
+- if you look at mocha package in node_modules, it has its own dependencies which are installed, but it also has development dependencies which are not installed.
+- When I add mocha package as development dependency in my main package.json
+- It also adds all of mocha's dependencies as development dependencies
+- you can see that with "dev": true flag in json lock file.
+- Now I am installing semver as dependency package (without -D flag)
+npm install semver
+- Install one more package browserslist
+npm install browserslist
+- all dependent packages of above packages are installed as dependent (i.e. no dev=true flag)
+- so now if you delete node_modules folder and install npm again, it uses lock file to install same versions
+- you may notice descripencies with versions of dependent packages and dev-dependent packages. e.g. caniuse-lite package has two different versions for two different main pakcages.
+
+
+## Package updates
+# npm update 
+- updates all listed packages to latest release version within SemVer.
+e.g. ^1.2.5 ===> updated to ^1.3.0
+- But if version 2.0.0 is released then it will not be updated.
+# updating single package
+  npm update <package>
+
+# Challenge
+- create new project and perform npm init
+- install exact version of any pacakge
+  version  must be older than latest version
+  use --save-exact npm option
+  e.g. : 
+    npm view browserslist versions
+    npm install browserslist@4.16.0 --save-exact
+- install specifi vversion of other package 
+  Version must be older than latest version
+  e.g.  
+   npm view color versions
+   npm install color@4.0.0
+- Perform npm update and analyze results.
+
+ Observations for above challenge
+   "dependencies": {
+    "browserslist": "4.16.0",   // this version doesnt have ^ in front.
+    "color": "^4.0.0"    // this version has ^ in front.
+  }
+  - so most likely browserslist will not get updated with npm install.
+
